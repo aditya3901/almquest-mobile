@@ -56,7 +56,7 @@ class _HomeState extends State<Home> {
     final userStr = prefs!.getString("reg_user");
     if (userStr != null) {
       final user = jsonDecode(userStr);
-      userImg = user["photo"];
+      userImg = user["picture"];
       isLoggedIn = true;
     } else {
       await GoogleSignIn().signOut();

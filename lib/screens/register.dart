@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'package:almquest/screens/screens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/constants.dart';
+import 'package:http/http.dart' as http;
 
 class Register extends StatefulWidget {
   @override
@@ -11,6 +15,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  bool isSending = false;
   final formKey = GlobalKey<FormState>();
   String userEmail = "";
   String userName = "";
@@ -19,10 +24,78 @@ class _RegisterState extends State<Register> {
   String selectedBtn = "donor";
   final types = ["Individual", "Organisation", "Food Chain"];
   String? type;
+  var coord = [];
 
   final _phoneController = TextEditingController();
   final _locationController = TextEditingController();
   final _travelController = TextEditingController();
+  final _carryController = TextEditingController();
+
+  void placeAutocomplete() async {
+    final query = _locationController.text;
+    var addr = await Geocoder.local.findAddressesFromQuery(query);
+    var first = addr.first;
+
+    coord = [first.coordinates.latitude, first.coordinates.longitude];
+
+    submitForm();
+  }
+
+  void submitForm() async {
+    if (formKey.currentState!.validate()) {
+      setState(() {
+        isSending = true;
+      });
+
+      var body = {};
+      if (selectedBtn == "donor") {
+        body = {
+          "name": userName,
+          "email": userEmail,
+          "picture": userImg,
+          "phone": _phoneController.text,
+          "location": {
+            "address": _locationController.text,
+            "coordinates": coord,
+          },
+          "distanceRange": _travelController.text,
+          "donorType": type,
+        };
+      } else {
+        body = {
+          "name": userName,
+          "email": userEmail,
+          "picture": userImg,
+          "phone": _phoneController.text,
+          "location": {
+            "address": _locationController.text,
+            "coordinates": coord,
+          },
+          "distanceRange": _travelController.text,
+          "maxCapacity": _carryController.text,
+        };
+      }
+
+      final reqBody = jsonEncode(body);
+
+      final res = await http.post(
+        Uri.parse(
+            "https://almquest-server.onrender.com/api/$selectedBtn/register"),
+        headers: {"Content-Type": "application/json"},
+        body: reqBody,
+      );
+
+      final json = jsonDecode(res.body);
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString("reg_user", jsonEncode(json["data"]));
+
+      Get.offAll(() => Home());
+    } else {
+      setState(() {
+        isSending = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -195,174 +268,214 @@ class _RegisterState extends State<Register> {
       drawer: const Drawer(),
       body: userEmail == ""
           ? Container()
-          : SingleChildScrollView(
-              child: Container(
-                margin: const EdgeInsets.all(25),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: 10),
-                    const Text(
-                      "Get Your Free Account Now",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: kTextColor,
-                        fontSize: 18,
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    const Text(
-                      "Let's get you all set up so you can verify your personal account and begin setting up your profile.",
-                      style: TextStyle(color: kLightTextColor),
-                    ),
-                    const SizedBox(height: 15),
-                    const Text(
-                      "Select type of account",
-                      style: TextStyle(color: kTextColor),
-                    ),
-                    const SizedBox(height: 10),
-                    selectedBtn == "donor"
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              selectedButton(
-                                () {
-                                  setState(() {
-                                    selectedBtn = "donor";
-                                  });
-                                },
-                                CupertinoIcons.heart,
-                                "Donor",
-                              ),
-                              const SizedBox(height: 10),
-                              notSelectedButton(
-                                () {
-                                  setState(() {
-                                    selectedBtn = "distributor";
-                                  });
-                                },
-                                CupertinoIcons.gift,
-                                "Distributor",
-                              ),
-                            ],
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              notSelectedButton(
-                                () {
-                                  setState(() {
-                                    selectedBtn = "donor";
-                                  });
-                                },
-                                CupertinoIcons.heart,
-                                "Donor",
-                              ),
-                              const SizedBox(height: 10),
-                              selectedButton(
-                                () {
-                                  setState(() {
-                                    selectedBtn = "distributor";
-                                  });
-                                },
-                                CupertinoIcons.gift,
-                                "Distributor",
-                              ),
-                            ],
-                          ),
-                    const SizedBox(height: 15),
-                    Form(
-                      key: formKey,
-                      child: Column(
-                        children: [
-                          formField(
-                            "Name",
-                            TextInputType.name,
-                            null,
-                            userName,
-                          ),
-                          formField(
-                            "Email",
-                            TextInputType.emailAddress,
-                            null,
-                            userEmail,
-                          ),
-                          formField(
-                            "Phone",
-                            TextInputType.phone,
-                            _phoneController,
-                            null,
-                          ),
-                          formField(
-                            "Location",
-                            TextInputType.text,
-                            _locationController,
-                            null,
-                          ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 6),
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: kLightTextColor,
-                                width: 1,
-                              ),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton(
-                                hint: const Text(
-                                  "Select Category",
-                                  style: TextStyle(
-                                    color: kTextColor,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                dropdownColor: kBackgroundColor,
-                                value: type,
-                                isExpanded: true,
-                                style: TextStyle(
-                                  color: kTextColor,
-                                  fontFamily:
-                                      GoogleFonts.robotoSerif().fontFamily,
-                                ),
-                                items: types.map(buildMenuItem).toList(),
-                                onChanged: (String? value) => setState(() {
-                                  type = value!;
-                                }),
-                              ),
-                            ),
-                          ),
-                          formField(
-                            "How far can you travel?",
-                            TextInputType.number,
-                            _travelController,
-                            null,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                          primary: const Color(0xFF3B81F6)),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 15),
-                        child: Text(
-                          "Register as Distributor",
-                          textAlign: TextAlign.center,
+          : isSending
+              ? const Center(
+                  child: CupertinoActivityIndicator(
+                    radius: 18,
+                  ),
+                )
+              : SingleChildScrollView(
+                  child: Container(
+                    margin: const EdgeInsets.all(25),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(height: 10),
+                        const Text(
+                          "Get Your Free Account Now",
                           style: TextStyle(
-                            color: kTextColor,
                             fontWeight: FontWeight.bold,
+                            color: kTextColor,
+                            fontSize: 18,
                           ),
                         ),
-                      ),
+                        const SizedBox(height: 15),
+                        const Text(
+                          "Let's get you all set up so you can verify your personal account and begin setting up your profile.",
+                          style: TextStyle(color: kLightTextColor),
+                        ),
+                        const SizedBox(height: 15),
+                        const Text(
+                          "Select type of account",
+                          style: TextStyle(color: kTextColor),
+                        ),
+                        const SizedBox(height: 10),
+                        selectedBtn == "donor"
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  selectedButton(
+                                    () {
+                                      setState(() {
+                                        selectedBtn = "donor";
+                                      });
+                                    },
+                                    CupertinoIcons.heart,
+                                    "Donor",
+                                  ),
+                                  const SizedBox(height: 10),
+                                  notSelectedButton(
+                                    () {
+                                      setState(() {
+                                        selectedBtn = "distributor";
+                                      });
+                                    },
+                                    CupertinoIcons.gift,
+                                    "Distributor",
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  notSelectedButton(
+                                    () {
+                                      setState(() {
+                                        selectedBtn = "donor";
+                                      });
+                                    },
+                                    CupertinoIcons.heart,
+                                    "Donor",
+                                  ),
+                                  const SizedBox(height: 10),
+                                  selectedButton(
+                                    () {
+                                      setState(() {
+                                        selectedBtn = "distributor";
+                                      });
+                                    },
+                                    CupertinoIcons.gift,
+                                    "Distributor",
+                                  ),
+                                ],
+                              ),
+                        const SizedBox(height: 15),
+                        Form(
+                          key: formKey,
+                          child: Column(
+                            children: [
+                              formField(
+                                "Name",
+                                TextInputType.name,
+                                null,
+                                userName,
+                              ),
+                              formField(
+                                "Email",
+                                TextInputType.emailAddress,
+                                null,
+                                userEmail,
+                              ),
+                              formField(
+                                "Phone",
+                                TextInputType.phone,
+                                _phoneController,
+                                null,
+                              ),
+                              formField(
+                                "Location",
+                                TextInputType.text,
+                                _locationController,
+                                null,
+                              ),
+                              selectedBtn == "donor"
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 6),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: kLightTextColor,
+                                              width: 1,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          child: DropdownButtonHideUnderline(
+                                            child: DropdownButton(
+                                              hint: const Text(
+                                                "Select Category",
+                                                style: TextStyle(
+                                                  color: kTextColor,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              dropdownColor: kBackgroundColor,
+                                              value: type,
+                                              isExpanded: true,
+                                              style: TextStyle(
+                                                color: kTextColor,
+                                                fontFamily:
+                                                    GoogleFonts.robotoSerif()
+                                                        .fontFamily,
+                                              ),
+                                              items: types
+                                                  .map(buildMenuItem)
+                                                  .toList(),
+                                              onChanged: (String? value) =>
+                                                  setState(() {
+                                                type = value!;
+                                              }),
+                                            ),
+                                          ),
+                                        ),
+                                        formField(
+                                          "How far can you travel?",
+                                          TextInputType.number,
+                                          _travelController,
+                                          null,
+                                        ),
+                                      ],
+                                    )
+                                  : Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        formField(
+                                          "How much can you carry?",
+                                          TextInputType.number,
+                                          _carryController,
+                                          null,
+                                        ),
+                                        formField(
+                                          "How far can you travel?",
+                                          TextInputType.number,
+                                          _travelController,
+                                          null,
+                                        ),
+                                      ],
+                                    ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        ElevatedButton(
+                          onPressed: () {
+                            placeAutocomplete();
+                          },
+                          style: ElevatedButton.styleFrom(
+                              primary: const Color(0xFF3B81F6)),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 15),
+                            child: Text(
+                              "Register as Distributor",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: kTextColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
     );
   }
 

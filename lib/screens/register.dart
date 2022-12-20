@@ -1,0 +1,378 @@
+import 'dart:convert';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../utils/constants.dart';
+
+class Register extends StatefulWidget {
+  @override
+  _RegisterState createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
+  final formKey = GlobalKey<FormState>();
+  String userEmail = "";
+  String userName = "";
+  String userImg = "";
+
+  String selectedBtn = "donor";
+  final types = ["Individual", "Organisation", "Food Chain"];
+  String? type;
+
+  final _phoneController = TextEditingController();
+  final _locationController = TextEditingController();
+  final _travelController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    initVars();
+  }
+
+  void initVars() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userStr = prefs.getString("temp_user");
+    if (userStr != null) {
+      final user = jsonDecode(userStr);
+      userEmail = user["email"];
+      userImg = user["photo"];
+      userName = user["name"];
+      setState(() {});
+    }
+  }
+
+  Widget selectedButton(VoidCallback onTap, IconData icon, String title) {
+    return ElevatedButton.icon(
+      onPressed: onTap,
+      style: ElevatedButton.styleFrom(primary: const Color(0xFF3B81F6)),
+      icon: Icon(
+        icon,
+        color: kTextColor,
+        size: 20,
+      ),
+      label: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 15),
+        child: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: kTextColor,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget notSelectedButton(VoidCallback onTap, IconData icon, String title) {
+    return OutlinedButton.icon(
+      onPressed: onTap,
+      style: OutlinedButton.styleFrom(
+        side: const BorderSide(
+          width: 1,
+          color: Color(0xFF3B81F6),
+        ),
+      ),
+      icon: Icon(
+        icon,
+        color: const Color(0xFF3B81F6),
+        size: 20,
+      ),
+      label: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 15),
+        child: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Color(0xFF3B81F6),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget formField(String label, TextInputType inputType,
+        TextEditingController? controller, String? initVal) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6),
+        child: initVal != null
+            ? TextFormField(
+                readOnly: true,
+                initialValue: initVal,
+                style: const TextStyle(
+                  color: kTextColor,
+                  fontSize: 14,
+                ),
+                decoration: InputDecoration(
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: kLightTextColor),
+                  ),
+                  labelText: label,
+                  labelStyle: const TextStyle(
+                    color: kLightTextColor,
+                    fontSize: 14,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+                  border: const OutlineInputBorder(),
+                ),
+              )
+            : TextFormField(
+                controller: controller,
+                style: const TextStyle(
+                  color: kTextColor,
+                  fontSize: 14,
+                ),
+                decoration: InputDecoration(
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: kLightTextColor),
+                  ),
+                  labelText: label,
+                  labelStyle: const TextStyle(
+                    color: kLightTextColor,
+                    fontSize: 14,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+                  border: const OutlineInputBorder(),
+                ),
+                keyboardType: inputType,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "$label required";
+                  }
+                  return null;
+                },
+              ),
+      );
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "AlmQuest",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: [
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.notifications_outlined,
+                ),
+              ),
+              userImg != ""
+                  ? Card(
+                      margin: const EdgeInsets.only(
+                        right: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        side: const BorderSide(color: kTextColor, width: 2),
+                      ),
+                      child: CircleAvatar(
+                        radius: 15,
+                        backgroundImage: NetworkImage(
+                          userImg,
+                        ),
+                        onBackgroundImageError: (exception, stackTrace) {
+                          userImg =
+                              "https://t4.ftcdn.net/jpg/03/26/98/51/360_F_326985142_1aaKcEjMQW6ULp6oI9MYuv8lN9f8sFmj.jpg";
+                          setState(() {});
+                        },
+                      ),
+                    )
+                  : Container(),
+            ],
+          ),
+        ],
+      ),
+      drawer: const Drawer(),
+      body: userEmail == ""
+          ? Container()
+          : SingleChildScrollView(
+              child: Container(
+                margin: const EdgeInsets.all(25),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 10),
+                    const Text(
+                      "Get Your Free Account Now",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: kTextColor,
+                        fontSize: 18,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    const Text(
+                      "Let's get you all set up so you can verify your personal account and begin setting up your profile.",
+                      style: TextStyle(color: kLightTextColor),
+                    ),
+                    const SizedBox(height: 15),
+                    const Text(
+                      "Select type of account",
+                      style: TextStyle(color: kTextColor),
+                    ),
+                    const SizedBox(height: 10),
+                    selectedBtn == "donor"
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              selectedButton(
+                                () {
+                                  setState(() {
+                                    selectedBtn = "donor";
+                                  });
+                                },
+                                CupertinoIcons.heart,
+                                "Donor",
+                              ),
+                              const SizedBox(height: 10),
+                              notSelectedButton(
+                                () {
+                                  setState(() {
+                                    selectedBtn = "distributor";
+                                  });
+                                },
+                                CupertinoIcons.gift,
+                                "Distributor",
+                              ),
+                            ],
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              notSelectedButton(
+                                () {
+                                  setState(() {
+                                    selectedBtn = "donor";
+                                  });
+                                },
+                                CupertinoIcons.heart,
+                                "Donor",
+                              ),
+                              const SizedBox(height: 10),
+                              selectedButton(
+                                () {
+                                  setState(() {
+                                    selectedBtn = "distributor";
+                                  });
+                                },
+                                CupertinoIcons.gift,
+                                "Distributor",
+                              ),
+                            ],
+                          ),
+                    const SizedBox(height: 15),
+                    Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          formField(
+                            "Name",
+                            TextInputType.name,
+                            null,
+                            userName,
+                          ),
+                          formField(
+                            "Email",
+                            TextInputType.emailAddress,
+                            null,
+                            userEmail,
+                          ),
+                          formField(
+                            "Phone",
+                            TextInputType.phone,
+                            _phoneController,
+                            null,
+                          ),
+                          formField(
+                            "Location",
+                            TextInputType.text,
+                            _locationController,
+                            null,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 6),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: kLightTextColor,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                hint: const Text(
+                                  "Select Category",
+                                  style: TextStyle(
+                                    color: kTextColor,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                dropdownColor: kBackgroundColor,
+                                value: type,
+                                isExpanded: true,
+                                style: TextStyle(
+                                  color: kTextColor,
+                                  fontFamily:
+                                      GoogleFonts.robotoSerif().fontFamily,
+                                ),
+                                items: types.map(buildMenuItem).toList(),
+                                onChanged: (String? value) => setState(() {
+                                  type = value!;
+                                }),
+                              ),
+                            ),
+                          ),
+                          formField(
+                            "How far can you travel?",
+                            TextInputType.number,
+                            _travelController,
+                            null,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                          primary: const Color(0xFF3B81F6)),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        child: Text(
+                          "Register as Distributor",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: kTextColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+    );
+  }
+
+  DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
+        value: item,
+        child: Text(
+          item,
+          style: const TextStyle(
+            fontSize: 14,
+          ),
+        ),
+      );
+}

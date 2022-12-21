@@ -32,7 +32,7 @@ class _RegisterState extends State<Register> {
   final _travelController = TextEditingController();
   final _carryController = TextEditingController();
 
-  void placeAutocomplete() async {
+  void getCoordFromLocation() async {
     final query = _locationController.text;
     var addr = await Geocoder.local.findAddressesFromQuery(query);
     var first = addr.first;
@@ -43,59 +43,60 @@ class _RegisterState extends State<Register> {
   }
 
   void submitForm() async {
-    if (formKey.currentState!.validate()) {
-      setState(() {
-        isSending = true;
-      });
+    setState(() {
+      isSending = true;
+    });
 
-      var body = {};
-      if (selectedBtn == "donor") {
-        body = {
-          "name": userName,
-          "email": userEmail,
-          "picture": userImg,
-          "phone": _phoneController.text,
-          "location": {
-            "address": _locationController.text,
-            "coordinates": coord,
-          },
-          "distanceRange": _travelController.text,
-          "donorType": type,
-        };
-      } else {
-        body = {
-          "name": userName,
-          "email": userEmail,
-          "picture": userImg,
-          "phone": _phoneController.text,
-          "location": {
-            "address": _locationController.text,
-            "coordinates": coord,
-          },
-          "distanceRange": _travelController.text,
-          "maxCapacity": _carryController.text,
-        };
-      }
-
-      final reqBody = jsonEncode(body);
-
-      final res = await http.post(
-        Uri.parse(
-            "https://almquest-server.onrender.com/api/$selectedBtn/register"),
-        headers: {"Content-Type": "application/json"},
-        body: reqBody,
-      );
-
-      final json = jsonDecode(res.body);
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setString("reg_user", jsonEncode(json["data"]));
-
-      Get.offAll(() => Home());
+    var body = {};
+    if (selectedBtn == "donor") {
+      body = {
+        "name": userName,
+        "email": userEmail,
+        "picture": userImg,
+        "phone": _phoneController.text,
+        "location": {
+          "address": _locationController.text,
+          "coordinates": coord,
+        },
+        "distanceRange": _travelController.text,
+        "donorType": type,
+      };
     } else {
-      setState(() {
-        isSending = false;
-      });
+      body = {
+        "name": userName,
+        "email": userEmail,
+        "picture": userImg,
+        "phone": _phoneController.text,
+        "location": {
+          "address": _locationController.text,
+          "coordinates": coord,
+        },
+        "distanceRange": _travelController.text,
+        "maxCapacity": _carryController.text,
+      };
     }
+
+    final reqBody = jsonEncode(body);
+
+    final res = await http.post(
+      Uri.parse(
+          "https://almquest-server.onrender.com/api/$selectedBtn/register"),
+      headers: {"Content-Type": "application/json"},
+      body: reqBody,
+    );
+
+    final json = jsonDecode(res.body);
+    final regUser = {
+      "name": userName,
+      "email": userEmail,
+      "picture": userImg,
+      "userType": selectedBtn,
+      "id": json["data"]["_id"],
+    };
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("reg_user", jsonEncode(regUser));
+
+    Get.offAll(() => Home());
   }
 
   @override
@@ -107,13 +108,12 @@ class _RegisterState extends State<Register> {
   void initVars() async {
     final prefs = await SharedPreferences.getInstance();
     final userStr = prefs.getString("temp_user");
-    if (userStr != null) {
-      final user = jsonDecode(userStr);
-      userEmail = user["email"];
-      userImg = user["photo"];
-      userName = user["name"];
-      setState(() {});
-    }
+
+    final user = jsonDecode(userStr!);
+    userEmail = user["email"];
+    userImg = user["photo"] ?? "";
+    userName = user["name"];
+    setState(() {});
   }
 
   Widget selectedButton(VoidCallback onTap, IconData icon, String title) {
@@ -464,7 +464,9 @@ class _RegisterState extends State<Register> {
                         const SizedBox(height: 4),
                         ElevatedButton(
                           onPressed: () {
-                            placeAutocomplete();
+                            if (formKey.currentState!.validate()) {
+                              getCoordFromLocation();
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                               primary: const Color(0xFF3B81F6)),

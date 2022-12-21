@@ -37,12 +37,12 @@ class _HomeState extends State<Home> {
         final regUser = {
           "name": googleUser.displayName,
           "email": googleUser.email,
-          "picture": googleUser.photoUrl,
+          "picture": googleUser.photoUrl ?? "",
           "userType": data["userType"],
           "id": data["id"],
         };
         prefs!.setString("reg_user", jsonEncode(regUser));
-        userImg = googleUser.photoUrl!;
+        userImg = googleUser.photoUrl ?? "";
         isLoggedIn = true;
         setState(() {});
       } else {

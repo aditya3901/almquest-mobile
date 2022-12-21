@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:almquest/screens/screens.dart';
+import 'package:almquest/widgets/navigation_drawer.dart';
 import 'package:almquest/widgets/popup_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,7 @@ class _HomeState extends State<Home> {
           "photo": googleUser.photoUrl,
         };
         prefs!.setString("temp_user", jsonEncode(data));
-        Get.offAll(() => Register());
+        Get.to(() => Register());
       }
     } else {
       await GoogleSignIn().signOut();
@@ -214,7 +215,7 @@ class _HomeState extends State<Home> {
                 ),
         ],
       ),
-      drawer: const Drawer(),
+      drawer: NavigationDrawer(),
       body: Container(),
     );
   }

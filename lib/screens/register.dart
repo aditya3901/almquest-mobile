@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:almquest/screens/screens.dart';
+import 'package:almquest/widgets/popup_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
@@ -240,16 +241,24 @@ class _RegisterState extends State<Register> {
                 ),
               ),
               userImg != ""
-                  ? Card(
-                      margin: const EdgeInsets.only(
-                        right: 12,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        side: const BorderSide(color: kTextColor, width: 2),
-                      ),
-                      child: CircleAvatar(
-                        radius: 15,
+                  ? PopUpMenu(
+                      menuList: const [
+                        PopupMenuItem(
+                          value: "signout",
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.logout,
+                              color: kTextColor,
+                            ),
+                            title: Text(
+                              "Sign Out",
+                              style: TextStyle(color: kTextColor),
+                            ),
+                          ),
+                        ),
+                      ],
+                      icon: CircleAvatar(
+                        radius: 20,
                         backgroundImage: NetworkImage(
                           userImg,
                         ),
@@ -265,7 +274,6 @@ class _RegisterState extends State<Register> {
           ),
         ],
       ),
-      drawer: const Drawer(),
       body: userEmail == ""
           ? Container()
           : isSending

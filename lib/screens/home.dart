@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:almquest/screens/screens.dart';
+import 'package:almquest/widgets/popup_menu.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -20,9 +22,13 @@ class _HomeState extends State<Home> {
   void signIn() async {
     final googleUser = await GoogleSignIn().signIn();
     if (googleUser != null) {
+      final body = {"email": googleUser.email};
       final res = await http.post(
         Uri.parse("https://almquest-server.onrender.com/api/checkExist"),
-        body: {"email": googleUser.email},
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode(body),
       );
 
       final data = jsonDecode(res.body);
@@ -30,11 +36,12 @@ class _HomeState extends State<Home> {
         final regUser = {
           "name": googleUser.displayName,
           "email": googleUser.email,
-          "photo": googleUser.photoUrl,
+          "picture": googleUser.photoUrl,
           "userType": data["userType"],
           "id": data["id"],
         };
         prefs!.setString("reg_user", jsonEncode(regUser));
+        userImg = googleUser.photoUrl!;
         isLoggedIn = true;
         setState(() {});
       } else {
@@ -121,16 +128,78 @@ class _HomeState extends State<Home> {
                         Icons.notifications_outlined,
                       ),
                     ),
-                    Card(
-                      margin: const EdgeInsets.only(
-                        right: 12,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        side: const BorderSide(color: kTextColor, width: 2),
-                      ),
-                      child: CircleAvatar(
-                        radius: 15,
+                    PopUpMenu(
+                      menuList: const [
+                        PopupMenuItem(
+                          value: "profile",
+                          child: ListTile(
+                            leading: Icon(
+                              CupertinoIcons.person,
+                              color: kTextColor,
+                            ),
+                            title: Text(
+                              "View Profile",
+                              style: TextStyle(color: kTextColor),
+                            ),
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: "theme",
+                          child: ListTile(
+                            leading: Icon(
+                              CupertinoIcons.moon,
+                              color: kTextColor,
+                            ),
+                            title: Text(
+                              "Change Theme",
+                              style: TextStyle(color: kTextColor),
+                            ),
+                          ),
+                        ),
+                        PopupMenuDivider(),
+                        PopupMenuItem(
+                          value: "invite",
+                          child: ListTile(
+                            leading: Icon(
+                              CupertinoIcons.person_add,
+                              color: kTextColor,
+                            ),
+                            title: Text(
+                              "Invite Others",
+                              style: TextStyle(color: kTextColor),
+                            ),
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: "help",
+                          child: ListTile(
+                            leading: Icon(
+                              CupertinoIcons.question_circle,
+                              color: kTextColor,
+                            ),
+                            title: Text(
+                              "Help",
+                              style: TextStyle(color: kTextColor),
+                            ),
+                          ),
+                        ),
+                        PopupMenuDivider(),
+                        PopupMenuItem(
+                          value: "signout",
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.logout,
+                              color: kTextColor,
+                            ),
+                            title: Text(
+                              "Sign Out",
+                              style: TextStyle(color: kTextColor),
+                            ),
+                          ),
+                        ),
+                      ],
+                      icon: CircleAvatar(
+                        radius: 20,
                         backgroundImage: NetworkImage(
                           userImg,
                         ),

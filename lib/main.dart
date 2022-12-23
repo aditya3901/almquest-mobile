@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: kBackgroundColor,
         primarySwatch: kPrimarySwatch,
         backgroundColor: kBackgroundColor,
-        fontFamily: GoogleFonts.robotoSerif().fontFamily,
+        fontFamily: GoogleFonts.ptSerif().fontFamily,
         appBarTheme: const AppBarTheme(
           elevation: 2,
           backgroundColor: kAppBarColor,

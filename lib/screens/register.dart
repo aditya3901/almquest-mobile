@@ -259,14 +259,18 @@ class _RegisterState extends State<Register> {
                       ],
                       icon: CircleAvatar(
                         radius: 20,
-                        backgroundImage: NetworkImage(
-                          userImg,
+                        backgroundColor: kTextColor,
+                        child: CircleAvatar(
+                          radius: 14,
+                          backgroundImage: NetworkImage(
+                            userImg,
+                          ),
+                          onBackgroundImageError: (exception, stackTrace) {
+                            userImg =
+                                "https://t4.ftcdn.net/jpg/03/26/98/51/360_F_326985142_1aaKcEjMQW6ULp6oI9MYuv8lN9f8sFmj.jpg";
+                            setState(() {});
+                          },
                         ),
-                        onBackgroundImageError: (exception, stackTrace) {
-                          userImg =
-                              "https://t4.ftcdn.net/jpg/03/26/98/51/360_F_326985142_1aaKcEjMQW6ULp6oI9MYuv8lN9f8sFmj.jpg";
-                          setState(() {});
-                        },
                       ),
                     )
                   : Container(),
@@ -275,11 +279,17 @@ class _RegisterState extends State<Register> {
         ],
       ),
       body: userEmail == ""
-          ? Container()
+          ? const Center(
+              child: CupertinoActivityIndicator(
+                radius: 18,
+                color: kTextColor,
+              ),
+            )
           : isSending
               ? const Center(
                   child: CupertinoActivityIndicator(
                     radius: 18,
+                    color: kTextColor,
                   ),
                 )
               : SingleChildScrollView(

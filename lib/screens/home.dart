@@ -201,14 +201,18 @@ class _HomeState extends State<Home> {
                       ],
                       icon: CircleAvatar(
                         radius: 20,
-                        backgroundImage: NetworkImage(
-                          userImg,
+                        backgroundColor: kTextColor,
+                        child: CircleAvatar(
+                          radius: 14,
+                          backgroundImage: NetworkImage(
+                            userImg,
+                          ),
+                          onBackgroundImageError: (exception, stackTrace) {
+                            userImg =
+                                "https://t4.ftcdn.net/jpg/03/26/98/51/360_F_326985142_1aaKcEjMQW6ULp6oI9MYuv8lN9f8sFmj.jpg";
+                            setState(() {});
+                          },
                         ),
-                        onBackgroundImageError: (exception, stackTrace) {
-                          userImg =
-                              "https://t4.ftcdn.net/jpg/03/26/98/51/360_F_326985142_1aaKcEjMQW6ULp6oI9MYuv8lN9f8sFmj.jpg";
-                          setState(() {});
-                        },
                       ),
                     ),
                   ],

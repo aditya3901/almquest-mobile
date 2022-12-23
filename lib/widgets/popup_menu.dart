@@ -1,4 +1,4 @@
-import 'package:almquest/screens/home.dart';
+import 'package:almquest/screens/screens.dart';
 import 'package:almquest/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,6 +18,8 @@ class PopUpMenu extends StatelessWidget {
       pref.clear();
       await GoogleSignIn().signOut();
       Get.offAll(() => Home());
+    } else if (value == "profile") {
+      Get.offAll(() => Profile());
     }
   }
 

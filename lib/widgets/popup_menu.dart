@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:almquest/screens/screens.dart';
 import 'package:almquest/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,14 @@ class PopUpMenu extends StatelessWidget {
       await GoogleSignIn().signOut();
       Get.offAll(() => Home());
     } else if (value == "profile") {
-      Get.offAll(() => Profile());
+      final prefs = await SharedPreferences.getInstance();
+      final user = jsonDecode(prefs.getString("reg_user")!);
+      Get.offAll(
+        () => Profile(
+          userType: user["userType"],
+          id: user["id"],
+        ),
+      );
     }
   }
 

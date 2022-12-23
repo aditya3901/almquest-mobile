@@ -1,18 +1,24 @@
 import 'dart:convert';
-import 'dart:ui';
 import 'package:almquest/screens/screens.dart';
 import 'package:almquest/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
 import '../widgets/navigation_drawer.dart';
 import '../widgets/popup_menu.dart';
 
 class Profile extends StatefulWidget {
+  final String userType;
+  final String id;
+
+  const Profile({
+    Key? key,
+    required this.userType,
+    required this.id,
+  }) : super(key: key);
+
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -23,12 +29,9 @@ class _ProfileState extends State<Profile> {
   var userImg = "";
 
   void getProfile() async {
-    final pref = await SharedPreferences.getInstance();
-    var userLocal = jsonDecode(pref.getString("reg_user")!);
-    final id = userLocal["id"];
-
     final res = await http.get(
-      Uri.parse("https://almquest-server.onrender.com/api/donor/$id"),
+      Uri.parse(
+          "https://almquest-server.onrender.com/api/${widget.userType}/${widget.id}"),
       headers: {
         "Content-Type": "application/json",
       },
@@ -64,7 +67,6 @@ class _ProfileState extends State<Profile> {
               style: const TextStyle(
                 color: kTextColor,
                 overflow: TextOverflow.ellipsis,
-                fontWeight: FontWeight.bold,
                 fontSize: 15,
               ),
             ),
@@ -229,9 +231,10 @@ class _ProfileState extends State<Profile> {
                           Text(
                             user["name"],
                             textAlign: TextAlign.center,
+                            maxLines: 2,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 32,
+                              fontSize: 30,
                               color: kTextColor,
                             ),
                           ),
@@ -247,7 +250,9 @@ class _ProfileState extends State<Profile> {
                             child: Padding(
                               padding: const EdgeInsets.all(10),
                               child: Text(
-                                "Lifetime Donation: ${user["lifetimeDonation"]}",
+                                widget.userType == "donor"
+                                    ? "Lifetime Donation: ${user["lifetimeDonation"]}"
+                                    : "Lifetime Distribution: ${user["totalPackagesDistributed"]}",
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
                                   color: kTextColor,
@@ -258,7 +263,9 @@ class _ProfileState extends State<Profile> {
                           ),
                           profileItem(
                             CupertinoIcons.person_circle,
-                            "AlmQuest Donor",
+                            widget.userType == "donor"
+                                ? "AlmQuest Donor"
+                                : "AlmQuest Distributor",
                           ),
                           profileItem(CupertinoIcons.mail, user["email"]),
                           profileItem(
@@ -271,17 +278,65 @@ class _ProfileState extends State<Profile> {
                             CupertinoIcons.location,
                             user["location"]["address"],
                           ),
+                          widget.userType == "donor"
+                              ? profileItem(
+                                  CupertinoIcons.person_3,
+                                  user["donorType"],
+                                )
+                              : profileItem(
+                                  CupertinoIcons.cart,
+                                  "${user["maxCapacity"]}  units",
+                                ),
                           profileItem(
-                              CupertinoIcons.person_3, user["donorType"]),
-                          profileItem(
-                            CupertinoIcons.cart,
+                            CupertinoIcons.car_detailed,
                             "${user["distanceRange"]}  kilometres",
                           ),
-                          const SizedBox(height: 20),
+                          widget.userType == "distributor"
+                              ? ListTile(
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 12),
+                                  title: const Text(
+                                    "Toggle Activity",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: kTextColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  trailing: CupertinoSwitch(
+                                    activeColor: const Color(0xFF3B81F6),
+                                    value: user["isActive"],
+                                    onChanged: (value) async {
+                                      setState(() {
+                                        isLoading = true;
+                                      });
+                                      await http.post(
+                                        Uri.parse(
+                                            "https://almquest-server.onrender.com/api/distributor/toggle/${widget.id}"),
+                                        headers: {
+                                          "Content-Type": "application/json",
+                                        },
+                                      );
+                                      setState(() {
+                                        user["isActive"] = value;
+                                        isLoading = false;
+                                      });
+                                    },
+                                  ),
+                                )
+                              : const SizedBox(height: 20),
                           Container(
                             margin: const EdgeInsets.symmetric(horizontal: 8),
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Get.to(
+                                  () => UpdateProfile(
+                                    userType: widget.userType,
+                                    id: widget.id,
+                                    user: user,
+                                  ),
+                                );
+                              },
                               style: ElevatedButton.styleFrom(
                                   primary: const Color(0xFF3B81F6)),
                               child: const ListTile(
@@ -301,30 +356,33 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),
                           const SizedBox(height: 14),
-                          Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Get.to(() => Donate());
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.white10),
-                              child: const ListTile(
-                                trailing: Icon(
-                                  CupertinoIcons.gift,
-                                  color: kTextColor,
-                                ),
-                                title: Text(
-                                  "Donate Package",
-                                  style: TextStyle(
-                                    color: kTextColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
+                          widget.userType == "donor"
+                              ? Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      Get.to(() => Donate());
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Colors.white10),
+                                    child: const ListTile(
+                                      trailing: Icon(
+                                        CupertinoIcons.gift,
+                                        color: kTextColor,
+                                      ),
+                                      title: Text(
+                                        "Donate Package",
+                                        style: TextStyle(
+                                          color: kTextColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                          ),
+                                )
+                              : Container(),
                         ],
                       ),
                     ),

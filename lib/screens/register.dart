@@ -111,7 +111,7 @@ class _RegisterState extends State<Register> {
 
     final user = jsonDecode(userStr!);
     userEmail = user["email"];
-    userImg = user["photo"] ?? "";
+    userImg = user["photo"] ?? "null";
     userName = user["name"];
     setState(() {});
   }

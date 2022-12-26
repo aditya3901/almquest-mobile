@@ -107,12 +107,6 @@ class _ProfileState extends State<Profile> {
               actions: [
                 Row(
                   children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.notifications_outlined,
-                      ),
-                    ),
                     PopUpMenu(
                       menuList: const [
                         PopupMenuItem(
@@ -209,12 +203,6 @@ class _ProfileState extends State<Profile> {
                 alignment: Alignment.topCenter,
                 children: [
                   Card(
-                    // shape: RoundedRectangleBorder(
-                    //   side: const BorderSide(
-                    //     color: kLightTextColor,
-                    //   ),
-                    //   borderRadius: BorderRadius.circular(10),
-                    // ),
                     margin: const EdgeInsets.only(
                       left: 20,
                       right: 20,
@@ -226,7 +214,6 @@ class _ProfileState extends State<Profile> {
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           const SizedBox(height: 70),
                           Text(
@@ -241,25 +228,23 @@ class _ProfileState extends State<Profile> {
                           ),
                           const SizedBox(height: 15),
                           Container(
+                            padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
                               color: Colors.white12,
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Text(
-                                widget.userType == "donor"
-                                    ? "Lifetime Donation: ${user["lifetimeDonation"]}"
-                                    : "Lifetime Distribution: ${user["totalPackagesDistributed"]}",
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  color: kTextColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            child: Text(
+                              widget.userType == "donor"
+                                  ? "Lifetime Donation: ${user["lifetimeDonation"]}"
+                                  : "Lifetime Distribution: ${user["totalPackagesDistributed"]}",
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: kTextColor,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 12),
                           profileItem(
                             CupertinoIcons.checkmark_seal,
                             widget.userType == "donor"

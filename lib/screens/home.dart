@@ -195,7 +195,10 @@ class _HomeState extends State<Home> {
 
                         return PopupMenuItem(
                           padding: const EdgeInsets.all(0),
-                          value: notif,
+                          value: {
+                            "userType": user["userType"],
+                            "notif": notif,
+                          },
                           child: ListTile(
                             tileColor: notif["notif_seen"] != null &&
                                     notif["notif_seen"] == true

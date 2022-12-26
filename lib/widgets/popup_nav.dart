@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../screens/screens.dart';
 import '../utils/constants.dart';
 import 'package:http/http.dart' as http;
 
@@ -23,13 +24,16 @@ class PopUpNav extends StatelessWidget {
   }
 
   void onSelected(BuildContext context, dynamic value) async {
-    if (value["notif_seen"] == false) {
-      notifSeen(value["_id"]);
+    if (value["notif"]["notif_seen"] == false) {
+      notifSeen(value["notif"]["_id"]);
     }
 
-    // Get.to(
-    //   () => Transaction(pid: value["packageId"]),
-    // );
+    Get.to(
+      () => Transaction(
+        pid: value["notif"]["packageId"],
+        userType: value["userType"],
+      ),
+    );
   }
 
   @override

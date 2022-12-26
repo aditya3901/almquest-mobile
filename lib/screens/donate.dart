@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:almquest/screens/screens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
@@ -16,8 +15,8 @@ class Donate extends StatefulWidget {
 class _DonateState extends State<Donate> {
   final formKey = GlobalKey<FormState>();
   var coord = [];
-  var donorId = "";
-  bool isSending = false;
+  bool isLoading = true;
+  var user = {};
 
   final _quantityController = TextEditingController();
   final _travelController = TextEditingController();
@@ -37,12 +36,17 @@ class _DonateState extends State<Donate> {
     );
 
     final json = jsonDecode(res.body);
-    _locationController.text = json["data"]["location"]["address"];
-    donorId = json["data"]["_id"];
-    setState(() {});
+    user = json["data"];
+    _locationController.text = user["location"]["address"];
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void getCoordFromLocation() async {
+    setState(() {
+      isLoading = true;
+    });
     final query = _locationController.text;
     var addr = await Geocoder.local.findAddressesFromQuery(query);
     var first = addr.first;
@@ -52,21 +56,21 @@ class _DonateState extends State<Donate> {
   }
 
   void submit() async {
-    setState(() {
-      isSending = true;
-    });
-
+    final date = DateTime.now();
     final reqBody = {
-      "donor_id": donorId,
+      "donor_id": user["_id"],
+      "donor_name": user["name"],
+      "donor_phone": user["phone"],
       "quantity": _quantityController.text,
       "travelCapacity": _travelController.text,
       "location": {
         "coordinates": coord,
         "address": _locationController.text,
       },
+      "timestamp": "$date",
     };
 
-    final res = await http.post(
+    await http.post(
       Uri.parse("https://almquest-server.onrender.com/api/donor/donate"),
       headers: {
         "Content-Type": "application/json",
@@ -74,25 +78,7 @@ class _DonateState extends State<Donate> {
       body: jsonEncode(reqBody),
     );
 
-    final jsonRes = jsonDecode(res.body);
-    final packageId = jsonRes["package"]["_id"];
-
-    await http.get(
-      Uri.parse(
-        "https://almquest-pyserver.onrender.com/pair/$packageId",
-      ),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    );
-
-    Get.snackbar(
-      "Package successfully added",
-      "Please wait while we find you your perfect pair!",
-      backgroundColor: kLightTextColor,
-      duration: const Duration(seconds: 4),
-    );
-    Get.offAll(() => Home());
+    Get.back();
   }
 
   @override
@@ -145,88 +131,81 @@ class _DonateState extends State<Donate> {
           ),
         ),
       ),
-      body: _locationController.text.isEmpty
+      body: isLoading
           ? const Center(
               child: CupertinoActivityIndicator(
                 radius: 18,
                 color: kTextColor,
               ),
             )
-          : isSending
-              ? const Center(
-                  child: CupertinoActivityIndicator(
-                    radius: 18,
-                    color: kTextColor,
-                  ),
-                )
-              : SingleChildScrollView(
-                  child: Container(
-                    margin: const EdgeInsets.all(25),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const SizedBox(height: 10),
-                        const Text(
-                          "Add a package",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: kTextColor,
-                            fontSize: 18,
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        const Text(
-                          "Add your package details, your current location and how far you can carry the package from your current location.",
-                          style: TextStyle(color: kLightTextColor),
-                        ),
-                        const SizedBox(height: 15),
-                        Form(
-                          key: formKey,
-                          child: Column(
-                            children: [
-                              formField(
-                                "Number of meals",
-                                TextInputType.number,
-                                _quantityController,
-                              ),
-                              formField(
-                                "Travel Capacity",
-                                TextInputType.number,
-                                _travelController,
-                              ),
-                              formField(
-                                "Your Location",
-                                TextInputType.text,
-                                _locationController,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        ElevatedButton(
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              getCoordFromLocation();
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                              primary: const Color(0xFF3B81F6)),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 15),
-                            child: Text(
-                              "Donate Package",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: kTextColor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+          : SingleChildScrollView(
+              child: Container(
+                margin: const EdgeInsets.all(25),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 10),
+                    const Text(
+                      "Add a package",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: kTextColor,
+                        fontSize: 18,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 15),
+                    const Text(
+                      "Add your package details, your current location and how far you can carry the package from your current location.",
+                      style: TextStyle(color: kLightTextColor),
+                    ),
+                    const SizedBox(height: 15),
+                    Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          formField(
+                            "Number of meals",
+                            TextInputType.number,
+                            _quantityController,
+                          ),
+                          formField(
+                            "Travel Capacity",
+                            TextInputType.number,
+                            _travelController,
+                          ),
+                          formField(
+                            "Your Location",
+                            TextInputType.text,
+                            _locationController,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          getCoordFromLocation();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                          primary: const Color(0xFF3B81F6)),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        child: Text(
+                          "Donate Package",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: kTextColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+              ),
+            ),
     );
   }
 }

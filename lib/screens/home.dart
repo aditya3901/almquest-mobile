@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'package:almquest/screens/screens.dart';
 import 'package:almquest/widgets/navigation_drawer.dart';
 import 'package:almquest/widgets/popup_menu.dart';
+import 'package:almquest/widgets/popup_nav.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:pusher_websocket_flutter/pusher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/constants.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +21,10 @@ class _HomeState extends State<Home> {
   bool isLoggedIn = false;
   SharedPreferences? prefs;
   String userImg = "";
+  var user = {};
+  Channel? _channel;
+  List<dynamic> notifs = [];
+  bool checkNotif = false;
 
   void signIn() async {
     final googleUser = await GoogleSignIn().signIn();
@@ -34,17 +40,18 @@ class _HomeState extends State<Home> {
 
       final data = jsonDecode(res.body);
       if (data["isRegistered"]) {
-        final regUser = {
+        user = {
           "name": googleUser.displayName,
           "email": googleUser.email,
           "picture": googleUser.photoUrl ?? "",
           "userType": data["userType"],
           "id": data["id"],
         };
-        prefs!.setString("reg_user", jsonEncode(regUser));
+        prefs!.setString("reg_user", jsonEncode(user));
         userImg = googleUser.photoUrl ?? "";
-        isLoggedIn = true;
-        setState(() {});
+
+        getNotifs();
+        _initPusher();
       } else {
         final data = {
           "name": googleUser.displayName,
@@ -63,20 +70,70 @@ class _HomeState extends State<Home> {
     prefs = await SharedPreferences.getInstance();
     final userStr = prefs!.getString("reg_user");
     if (userStr != null) {
-      final user = jsonDecode(userStr);
+      user = jsonDecode(userStr);
       userImg = user["picture"];
-      isLoggedIn = true;
+
+      getNotifs();
+      _initPusher();
     } else {
       await GoogleSignIn().signOut();
       isLoggedIn = false;
+      setState(() {});
     }
-    setState(() {});
+  }
+
+  Future<void> getNotifs() async {
+    final res = await http.get(
+      Uri.parse(
+          "https://almquest-server.onrender.com/api/${user["userType"]}/${user["id"]}/getNotifs"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    );
+    final json = jsonDecode(res.body);
+    notifs = json["notifs"];
+    notifs = notifs.reversed.toList();
+    setState(() {
+      isLoggedIn = true;
+    });
   }
 
   @override
   void initState() {
     super.initState();
     initVars();
+  }
+
+  void _initPusher() async {
+    try {
+      await Pusher.init(
+        "b369bdc486176cddddfd",
+        PusherOptions(
+          cluster: "ap2",
+        ),
+      );
+
+      Pusher.connect();
+      _channel = await Pusher.subscribe("almquest-channel");
+      _channel!.bind(
+        user["id"],
+        (onEvent) async {
+          await getNotifs();
+          setState(() {
+            checkNotif = true;
+          });
+          final event = jsonDecode(onEvent.data);
+          Get.snackbar(
+            "New notification",
+            event["message"],
+            backgroundColor: kLightTextColor,
+            duration: const Duration(seconds: 3),
+          );
+        },
+      );
+    } catch (err) {
+      print(err);
+    }
   }
 
   @override
@@ -123,10 +180,69 @@ class _HomeState extends State<Home> {
                 )
               : Row(
                   children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.notifications_outlined,
+                    PopUpNav(
+                      menuList: notifs.map((notif) {
+                        final date1 = DateTime.parse(notif["timestamp"]);
+                        final date2 = DateTime.now();
+                        var time = "";
+                        if (date2.difference(date1).inMinutes < 60) {
+                          time = "${date2.difference(date1).inMinutes}m";
+                        } else if (date2.difference(date1).inHours < 24) {
+                          time = "${date2.difference(date1).inHours}h";
+                        } else {
+                          time = "${date2.difference(date1).inDays}d";
+                        }
+
+                        return PopupMenuItem(
+                          padding: const EdgeInsets.all(0),
+                          value: notif,
+                          child: ListTile(
+                            tileColor: notif["notif_seen"] != null &&
+                                    notif["notif_seen"] == true
+                                ? Colors.transparent
+                                : Colors.white12,
+                            leading: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(notif["photo"] ?? userImg),
+                              onBackgroundImageError:
+                                  (exception, stackTrace) {},
+                            ),
+                            title: RichText(
+                              text: TextSpan(
+                                style: const TextStyle(
+                                  color: kTextColor,
+                                  fontSize: 12,
+                                ),
+                                children: [
+                                  notif["user_type"] == "Donor"
+                                      ? TextSpan(
+                                          text: notif["status"] == "Paired"
+                                              ? "Hurray! We have found a distributor for your package!"
+                                              : "Oops! We could not find a distributor for your package!",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      : const TextSpan(
+                                          text:
+                                              "Hurray! We have assigned you to a donor!",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                  TextSpan(
+                                    text: " $time ago",
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                      icon: Icon(
+                        checkNotif
+                            ? Icons.notification_add_outlined
+                            : Icons.notifications_outlined,
                       ),
                     ),
                     PopUpMenu(

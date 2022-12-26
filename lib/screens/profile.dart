@@ -53,7 +53,7 @@ class _ProfileState extends State<Profile> {
 
   Widget profileItem(IconData icon, String title) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
       child: Row(
         children: [
           Icon(
@@ -68,6 +68,7 @@ class _ProfileState extends State<Profile> {
                 color: kTextColor,
                 overflow: TextOverflow.ellipsis,
                 fontSize: 15,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -208,12 +209,12 @@ class _ProfileState extends State<Profile> {
                 alignment: Alignment.topCenter,
                 children: [
                   Card(
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(
-                        color: kLightTextColor,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                    // shape: RoundedRectangleBorder(
+                    //   side: const BorderSide(
+                    //     color: kLightTextColor,
+                    //   ),
+                    //   borderRadius: BorderRadius.circular(10),
+                    // ),
                     margin: const EdgeInsets.only(
                       left: 20,
                       right: 20,
@@ -239,16 +240,13 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),
                           const SizedBox(height: 15),
-                          Card(
-                            color: kBackgroundColor,
-                            shape: RoundedRectangleBorder(
-                              side: const BorderSide(
-                                color: kTextColor,
-                              ),
+                          Container(
+                            decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
+                              color: Colors.white12,
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(10),
+                              padding: const EdgeInsets.all(12),
                               child: Text(
                                 widget.userType == "donor"
                                     ? "Lifetime Donation: ${user["lifetimeDonation"]}"
@@ -261,11 +259,12 @@ class _ProfileState extends State<Profile> {
                               ),
                             ),
                           ),
+                          const SizedBox(height: 15),
                           profileItem(
-                            CupertinoIcons.person_circle,
+                            CupertinoIcons.checkmark_seal,
                             widget.userType == "donor"
-                                ? "AlmQuest Donor"
-                                : "AlmQuest Distributor",
+                                ? "AlmQuest Verified Donor"
+                                : "AlmQuest Verified Distributor",
                           ),
                           profileItem(CupertinoIcons.mail, user["email"]),
                           profileItem(
@@ -288,8 +287,8 @@ class _ProfileState extends State<Profile> {
                                   "${user["maxCapacity"]}  units",
                                 ),
                           profileItem(
-                            CupertinoIcons.car_detailed,
-                            "${user["distanceRange"]}  kilometres",
+                            Icons.travel_explore,
+                            "${user["distanceRange"]}  Kilometres",
                           ),
                           widget.userType == "distributor"
                               ? ListTile(
@@ -326,7 +325,7 @@ class _ProfileState extends State<Profile> {
                                 )
                               : const SizedBox(height: 20),
                           Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 8),
+                            margin: const EdgeInsets.symmetric(horizontal: 6),
                             child: ElevatedButton(
                               onPressed: () {
                                 Get.to(
@@ -338,10 +337,14 @@ class _ProfileState extends State<Profile> {
                                 );
                               },
                               style: ElevatedButton.styleFrom(
-                                  primary: const Color(0xFF3B81F6)),
+                                primary: const Color(0xFF3B81F6),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
                               child: const ListTile(
                                 trailing: Icon(
-                                  Icons.edit,
+                                  Icons.edit_location_outlined,
                                   color: kTextColor,
                                 ),
                                 title: Text(
@@ -359,13 +362,17 @@ class _ProfileState extends State<Profile> {
                           widget.userType == "donor"
                               ? Container(
                                   margin:
-                                      const EdgeInsets.symmetric(horizontal: 8),
+                                      const EdgeInsets.symmetric(horizontal: 6),
                                   child: ElevatedButton(
                                     onPressed: () {
                                       Get.to(() => Donate());
                                     },
                                     style: ElevatedButton.styleFrom(
-                                        primary: Colors.white10),
+                                      primary: Colors.white12,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
                                     child: const ListTile(
                                       trailing: Icon(
                                         CupertinoIcons.gift,

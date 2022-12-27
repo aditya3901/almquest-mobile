@@ -45,6 +45,21 @@ class _TransactionState extends State<Transaction> {
     });
   }
 
+  void deletePackage() async {
+    setState(() {
+      isLoading = true;
+    });
+    await http.delete(
+      Uri.parse(
+          "https://almquest-server.onrender.com/api/donor/${package["donor_id"]}/package/${package["_id"]}"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    );
+
+    Get.offAll(() => Home());
+  }
+
   @override
   void initState() {
     super.initState();
@@ -163,91 +178,126 @@ class _TransactionState extends State<Transaction> {
                         Icons.cookie_outlined,
                         "${package["quantity"]} Meals",
                       ),
-                      const Divider(color: kLightTextColor),
-                      packageDetail(
-                        CupertinoIcons.location,
-                        package["pair"]["meet_location"]["address"],
-                      ),
-                      const SizedBox(height: 10),
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.asset(
-                              "assets/bg_map.jpeg",
-                            ),
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: const Color(0xFF60A5FA),
-                            ),
-                            onPressed: () {
-                              Get.to(
-                                () => MapScreen(
-                                  userLocation: widget.userType == "donor"
-                                      ? package["location"]
-                                      : package["pair"]["distributor_location"],
-                                  meetLocation: package["pair"]
-                                      ["meet_location"],
+                      package["current_state"] == "Not Paired"
+                          ? Column(
+                              children: [
+                                packageDetail(
+                                  CupertinoIcons.location,
+                                  package["location"]["address"],
                                 ),
-                              );
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                              child: Text(
-                                "View Path",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                packageDetail(
+                                  Icons.travel_explore,
+                                  "${package["travelCapacity"]} kilometres",
                                 ),
-                              ),
+                                const SizedBox(height: 20),
+                                TextButton(
+                                  onPressed: () {
+                                    deletePackage();
+                                  },
+                                  child: const Text(
+                                    "Delete Package",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Color(0xFF60A5FA),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Column(
+                              children: [
+                                const Divider(color: kLightTextColor),
+                                packageDetail(
+                                  CupertinoIcons.location,
+                                  package["pair"]["meet_location"]["address"],
+                                ),
+                                const SizedBox(height: 10),
+                                Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.asset(
+                                        "assets/bg_map.jpeg",
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: const Color(0xFF60A5FA),
+                                      ),
+                                      onPressed: () {
+                                        Get.to(
+                                          () => MapScreen(
+                                            userLocation: widget.userType ==
+                                                    "donor"
+                                                ? package["location"]
+                                                : package["pair"]
+                                                    ["distributor_location"],
+                                            meetLocation: package["pair"]
+                                                ["meet_location"],
+                                          ),
+                                        );
+                                      },
+                                      child: const Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 10),
+                                        child: Text(
+                                          "View Path",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 15),
+                                const Divider(color: kLightTextColor),
+                                const SizedBox(height: 15),
+                                const SizedBox(
+                                  width: double.infinity,
+                                  child: Text(
+                                    "Donor Information",
+                                    style: TextStyle(
+                                      color: kTextColor,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                packageDetail(
+                                  CupertinoIcons.profile_circled,
+                                  package["donor_name"],
+                                ),
+                                packageDetail(
+                                  CupertinoIcons.phone,
+                                  package["donor_phone"],
+                                ),
+                                const Divider(color: kLightTextColor),
+                                const SizedBox(height: 15),
+                                const SizedBox(
+                                  width: double.infinity,
+                                  child: Text(
+                                    "Distributor Information",
+                                    style: TextStyle(
+                                      color: kTextColor,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                packageDetail(
+                                  CupertinoIcons.profile_circled,
+                                  package["pair"]["distributor_name"],
+                                ),
+                                packageDetail(
+                                  CupertinoIcons.phone,
+                                  package["pair"]["distributor_phone"],
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 15),
-                      const Divider(color: kLightTextColor),
-                      const SizedBox(height: 15),
-                      const SizedBox(
-                        width: double.infinity,
-                        child: Text(
-                          "Donor Information",
-                          style: TextStyle(
-                            color: kTextColor,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      packageDetail(
-                        CupertinoIcons.profile_circled,
-                        package["donor_name"],
-                      ),
-                      packageDetail(
-                        CupertinoIcons.phone,
-                        package["donor_phone"],
-                      ),
-                      const Divider(color: kLightTextColor),
-                      const SizedBox(height: 15),
-                      const SizedBox(
-                        width: double.infinity,
-                        child: Text(
-                          "Distributor Information",
-                          style: TextStyle(
-                            color: kTextColor,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      packageDetail(
-                        CupertinoIcons.profile_circled,
-                        package["pair"]["distributor_name"],
-                      ),
-                      packageDetail(
-                        CupertinoIcons.phone,
-                        package["pair"]["distributor_phone"],
-                      ),
                     ],
                   ),
                 ),

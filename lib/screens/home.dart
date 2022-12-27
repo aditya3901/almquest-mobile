@@ -43,12 +43,12 @@ class _HomeState extends State<Home> {
         user = {
           "name": googleUser.displayName,
           "email": googleUser.email,
-          "picture": googleUser.photoUrl ?? "",
+          "picture": data["picture"],
           "userType": data["userType"],
           "id": data["id"],
         };
         prefs!.setString("reg_user", jsonEncode(user));
-        userImg = googleUser.photoUrl ?? "";
+        userImg = user["picture"];
 
         getNotifs();
         _initPusher();
@@ -328,7 +328,7 @@ class _HomeState extends State<Home> {
                           ),
                           onBackgroundImageError: (exception, stackTrace) {
                             userImg =
-                                "https://t4.ftcdn.net/jpg/03/26/98/51/360_F_326985142_1aaKcEjMQW6ULp6oI9MYuv8lN9f8sFmj.jpg";
+                                "https://res.cloudinary.com/locer/image/upload/v1672113907/default_user.png";
                             setState(() {});
                           },
                         ),

@@ -219,16 +219,16 @@ class _HomeState extends State<Home> {
                                 children: [
                                   notif["user_type"] == "Donor"
                                       ? TextSpan(
-                                          text: notif["status"] == "Paired"
-                                              ? "Hurray! We have found a distributor for your package!"
-                                              : "Oops! We could not find a distributor for your package!",
+                                          text: notif["state"] == "Paired"
+                                              ? "Hurray! We have found a distributor for your package."
+                                              : "Oops! Looks like there are no distributors available near you.",
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
                                         )
                                       : const TextSpan(
                                           text:
-                                              "Hurray! We have assigned you to a donor!",
+                                              "Hurray! We have assigned you to a donor.",
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -339,7 +339,7 @@ class _HomeState extends State<Home> {
         ],
       ),
       drawer: NavigationDrawer(),
-      body: Container(),
+      body: const HomeBody(),
     );
   }
 }

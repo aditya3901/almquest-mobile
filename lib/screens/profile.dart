@@ -202,15 +202,13 @@ class _ProfileState extends State<Profile> {
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: [
-                  Card(
+                  Container(
                     margin: const EdgeInsets.only(
                       left: 20,
                       right: 20,
                       bottom: 20,
                       top: 100,
                     ),
-                    elevation: 10,
-                    color: kBackgroundColor,
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Column(

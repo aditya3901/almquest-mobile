@@ -111,7 +111,8 @@ class _RegisterState extends State<Register> {
 
     final user = jsonDecode(userStr!);
     userEmail = user["email"];
-    userImg = user["photo"] ?? "null";
+    userImg = user["photo"] ??
+        "https://res.cloudinary.com/locer/image/upload/v1672113907/default_user.png";
     userName = user["name"];
     setState(() {});
   }
@@ -234,12 +235,6 @@ class _RegisterState extends State<Register> {
         actions: [
           Row(
             children: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.notifications_outlined,
-                ),
-              ),
               userImg != ""
                   ? PopUpMenu(
                       menuList: const [
@@ -267,7 +262,7 @@ class _RegisterState extends State<Register> {
                           ),
                           onBackgroundImageError: (exception, stackTrace) {
                             userImg =
-                                "https://t4.ftcdn.net/jpg/03/26/98/51/360_F_326985142_1aaKcEjMQW6ULp6oI9MYuv8lN9f8sFmj.jpg";
+                                "https://res.cloudinary.com/locer/image/upload/v1672113907/default_user.png";
                             setState(() {});
                           },
                         ),

@@ -187,7 +187,7 @@ class _ProfileState extends State<Profile> {
                           ),
                           onBackgroundImageError: (exception, stackTrace) {
                             userImg =
-                                "https://t4.ftcdn.net/jpg/03/26/98/51/360_F_326985142_1aaKcEjMQW6ULp6oI9MYuv8lN9f8sFmj.jpg";
+                                "https://res.cloudinary.com/locer/image/upload/v1672113907/default_user.png";
                             setState(() {});
                           },
                         ),
@@ -392,7 +392,7 @@ class _ProfileState extends State<Profile> {
                           ),
                           onBackgroundImageError: (exception, stackTrace) {
                             userImg =
-                                "https://t4.ftcdn.net/jpg/03/26/98/51/360_F_326985142_1aaKcEjMQW6ULp6oI9MYuv8lN9f8sFmj.jpg";
+                                "https://res.cloudinary.com/locer/image/upload/v1672113907/default_user.png";
                             setState(() {});
                           },
                         ),

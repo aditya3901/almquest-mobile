@@ -339,7 +339,7 @@ class _HomeState extends State<Home> {
         ],
       ),
       drawer: NavigationDrawer(),
-      body: Container(),
+      body: const HomeBody(),
     );
   }
 }

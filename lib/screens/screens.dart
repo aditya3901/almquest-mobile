@@ -5,3 +5,6 @@ export './profile.dart';
 export './update_profile.dart';
 export './transaction.dart';
 export './map.dart';
+export './home_body.dart';
+export './team.dart';
+export './contact_us.dart';

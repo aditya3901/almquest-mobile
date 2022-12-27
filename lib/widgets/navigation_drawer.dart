@@ -1,6 +1,8 @@
+import 'package:almquest/screens/screens.dart';
 import 'package:almquest/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class NavigationDrawer extends StatelessWidget {
   @override
@@ -18,6 +20,7 @@ class NavigationDrawer extends StatelessWidget {
               ListTile(
                 onTap: () {
                   Navigator.of(context).pop();
+                  Get.offAll(() => Home());
                 },
                 leading: const Icon(
                   CupertinoIcons.question_circle,
@@ -34,6 +37,7 @@ class NavigationDrawer extends StatelessWidget {
               ListTile(
                 onTap: () {
                   Navigator.of(context).pop();
+                  Get.offAll(() => const Team());
                 },
                 leading: const Icon(
                   CupertinoIcons.person_2_alt,
@@ -50,13 +54,14 @@ class NavigationDrawer extends StatelessWidget {
               ListTile(
                 onTap: () {
                   Navigator.of(context).pop();
+                  Get.offAll(() => const ContactUs());
                 },
                 leading: const Icon(
                   Icons.feedback_outlined,
                   color: kTextColor,
                 ),
                 title: const Text(
-                  "Feedback",
+                  "Contact Us",
                   style: TextStyle(
                     color: kTextColor,
                     fontSize: 14,
@@ -68,11 +73,11 @@ class NavigationDrawer extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
                 leading: const Icon(
-                  CupertinoIcons.scope,
+                  CupertinoIcons.settings,
                   color: kTextColor,
                 ),
                 title: const Text(
-                  "Features",
+                  "Settings",
                   style: TextStyle(
                     color: kTextColor,
                     fontSize: 14,

@@ -26,6 +26,7 @@ dependencies:
   dio:
   flutter_polyline_points:
   google_maps_flutter:
+  line_icons: ^2.0.1
 
 dev_dependencies:
   flutter_test:

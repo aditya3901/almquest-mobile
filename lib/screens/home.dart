@@ -193,6 +193,21 @@ class _HomeState extends State<Home> {
                           time = "${date2.difference(date1).inDays}d";
                         }
 
+                        String notifMsg = "";
+                        if (notif["state"] == "Not Paired") {
+                          notifMsg =
+                              "Oops! 😞 Looks like there are no distributors available near you.";
+                        } else if (notif["state"] == "Paired") {
+                          notifMsg =
+                              "Hurray! 🎉 We have found a distributor for your package.";
+                        } else if (notif["state"] == "Received") {
+                          notifMsg =
+                              "Thanks! 🙏🏻 Distributor has received your package.";
+                        } else {
+                          notifMsg =
+                              "Celebration! 🎊 Your package just got distributed.";
+                        }
+
                         return PopupMenuItem(
                           padding: const EdgeInsets.all(0),
                           value: {
@@ -219,9 +234,7 @@ class _HomeState extends State<Home> {
                                 children: [
                                   notif["user_type"] == "Donor"
                                       ? TextSpan(
-                                          text: notif["state"] == "Paired"
-                                              ? "Hurray! We have found a distributor for your package."
-                                              : "Oops! Looks like there are no distributors available near you.",
+                                          text: notifMsg,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),

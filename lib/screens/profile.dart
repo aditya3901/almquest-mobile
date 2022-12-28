@@ -4,7 +4,7 @@ import 'package:almquest/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:http/http.dart' as http;
 import '../widgets/navigation_drawer.dart';
 import '../widgets/popup_menu.dart';
@@ -204,8 +204,8 @@ class _ProfileState extends State<Profile> {
                 children: [
                   Container(
                     margin: const EdgeInsets.only(
-                      left: 20,
-                      right: 20,
+                      left: 10,
+                      right: 10,
                       bottom: 20,
                       top: 100,
                     ),
@@ -327,7 +327,7 @@ class _ProfileState extends State<Profile> {
                               ),
                               child: const ListTile(
                                 trailing: Icon(
-                                  Icons.edit_location_outlined,
+                                  LineIcons.userEdit,
                                   color: kTextColor,
                                 ),
                                 title: Text(

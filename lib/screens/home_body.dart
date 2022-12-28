@@ -1,6 +1,6 @@
 import 'package:almquest/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:line_icons/line_icons.dart';
 
 class HomeBody extends StatelessWidget {
   const HomeBody({Key? key}) : super(key: key);
@@ -247,143 +247,120 @@ class HomeBody extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Image.network(
-                "https://images.pexels.com/photos/6995212/pexels-photo-6995212.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                height: 300,
+            Container(
+              margin: const EdgeInsets.only(top: 30, bottom: 50),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  "assets/features.png",
+                ),
               ),
             ),
-            Stack(
-              alignment: Alignment.bottomCenter,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                          color: kLightTextColor,
-                        ),
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 58, 114, 235),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      elevation: 10,
-                      color: kBackgroundColor,
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: const [
-                            ListTile(
-                              contentPadding: EdgeInsets.all(20),
-                              leading: Icon(CupertinoIcons.person_fill,
-                                  color: Color.fromARGB(255, 58, 114, 235),
-                                  size: 30),
-                              title: Text(
-                                "Donate on the go",
-                                style: TextStyle(
-                                  color: kTextColor,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-
-                              subtitle: Text(
-                                  "No matter where you are, you can always donate meals in any quantity you wish. We pair you up with the best Distributor for you.",
-                                  style: TextStyle(
-                                    color: Color.fromARGB(220, 224, 224, 224),
-                                  )),
-                              // SizedBox(height: 5),
-                            ),
-                          ],
-                        ),
+                      child: const Icon(
+                        LineIcons.mobilePhone,
+                        color: kTextColor,
+                        size: 28,
                       ),
                     ),
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                          color: kLightTextColor,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      elevation: 10,
-                      color: kBackgroundColor,
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: const [
-                            ListTile(
-                              contentPadding: EdgeInsets.all(20),
-                              leading: Icon(
-                                CupertinoIcons
-                                    .arrow_right_arrow_left_square_fill,
-                                color: Color.fromARGB(255, 58, 114, 235),
-                                size: 30,
-                              ),
-                              title: Text(
-                                "Efficient Exchange",
-                                style: TextStyle(
-                                  color: kTextColor,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-
-                              subtitle: Text(
-                                "Whether you are a donor or a distributor, we chose the best place for your exchange. We regard your convenience the most and provide you with the best directions to exchange point.",
-                                style: TextStyle(
-                                  color: Color.fromARGB(220, 224, 224, 224),
-                                ),
-                              ),
-                              // SizedBox(height: 5),
-                            ),
-                          ],
-                        ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      "Donate on the go",
+                      style: TextStyle(
+                        color: kTextColor,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                          color: kLightTextColor,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      elevation: 10,
-                      color: kBackgroundColor,
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: const [
-                            ListTile(
-                              contentPadding: EdgeInsets.all(20),
-                              leading: Icon(CupertinoIcons.car_fill,
-                                  color: Color.fromARGB(255, 58, 114, 235),
-                                  size: 30),
-                              title: Text(
-                                "See Where Your Package Goes",
-                                style: TextStyle(
-                                  color: kTextColor,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-
-                              subtitle: Text(
-                                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident ab nulla quod dignissimos vel non corrupti doloribus voluptatum eveniet",
-                                style: TextStyle(
-                                  color: Color.fromARGB(220, 224, 224, 224),
-                                ),
-                              ),
-                              // SizedBox(height: 5),
-                            ),
-                          ],
-                        ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      "No matter where you are, you can always donate meals in any quantity you wish. We pair you up with the best Distributor for you.",
+                      style: TextStyle(
+                        color: Color.fromARGB(220, 224, 224, 224),
                       ),
                     ),
                   ],
                 ),
+                const SizedBox(height: 30),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 58, 114, 235),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(
+                        LineIcons.alternateExchange,
+                        color: kTextColor,
+                        size: 28,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      "Efficient Exchange",
+                      style: TextStyle(
+                        color: kTextColor,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      "Whether you are a donor or a distributor, we chose the best place for your exchange. We regard your convenience the most and provide you with the best directions to exchange point.",
+                      style: TextStyle(
+                        color: Color.fromARGB(220, 224, 224, 224),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 58, 114, 235),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(
+                        LineIcons.truck,
+                        color: kTextColor,
+                        size: 28,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      "See Where Your Package Goes",
+                      style: TextStyle(
+                        color: kTextColor,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      "With AlmQuest keeping track of when the package is received by the distributor and when it gets finally distributed, you can be rest assured that your goodwill meets its right end.",
+                      style: TextStyle(
+                        color: Color.fromARGB(220, 224, 224, 224),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 50),
               ],
             ),
           ],

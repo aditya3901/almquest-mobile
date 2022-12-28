@@ -1,5 +1,6 @@
 import 'package:almquest/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class HomeBody extends StatelessWidget {
   const HomeBody({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class HomeBody extends StatelessWidget {
               "assets/hero.png",
               height: 300,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
             const Text(
               "Help us make the World a Better Place",
               style: TextStyle(
@@ -26,7 +27,7 @@ class HomeBody extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 20),
             const Text(
               "AlmQuest brings to you the opportunity to be the one to donate food or, be the one to get in touch with such donors and distribute the food where its needed.",
               style: TextStyle(
@@ -50,7 +51,7 @@ class HomeBody extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 100),
             const SizedBox(
               width: double.infinity,
               child: Text(
@@ -92,7 +93,7 @@ class HomeBody extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 100),
             SizedBox(
               width: double.infinity,
               child: RichText(
@@ -119,7 +120,7 @@ class HomeBody extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 30),
             const SizedBox(
               width: double.infinity,
               child: Text(
@@ -237,6 +238,154 @@ class HomeBody extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 50),
+            const SizedBox(height: 20),
+            const Text(
+              "Explore Our Awesome Features",
+              style: TextStyle(
+                color: kTextColor,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.network(
+                "https://images.pexels.com/photos/6995212/pexels-photo-6995212.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                height: 300,
+              ),
+            ),
+            Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                          color: kLightTextColor,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 10,
+                      color: kBackgroundColor,
+                      child: Container(
+                        margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: const [
+                            ListTile(
+                              contentPadding: EdgeInsets.all(20),
+                              leading: Icon(CupertinoIcons.person_fill,
+                                  color: Color.fromARGB(255, 58, 114, 235),
+                                  size: 30),
+                              title: Text(
+                                "Donate on the go",
+                                style: TextStyle(
+                                  color: kTextColor,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+
+                              subtitle: Text(
+                                  "No matter where you are, you can always donate meals in any quantity you wish. We pair you up with the best Distributor for you.",
+                                  style: TextStyle(
+                                    color: Color.fromARGB(220, 224, 224, 224),
+                                  )),
+                              // SizedBox(height: 5),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                          color: kLightTextColor,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 10,
+                      color: kBackgroundColor,
+                      child: Container(
+                        margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: const [
+                            ListTile(
+                              contentPadding: EdgeInsets.all(20),
+                              leading: Icon(
+                                CupertinoIcons
+                                    .arrow_right_arrow_left_square_fill,
+                                color: Color.fromARGB(255, 58, 114, 235),
+                                size: 30,
+                              ),
+                              title: Text(
+                                "Efficient Exchange",
+                                style: TextStyle(
+                                  color: kTextColor,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+
+                              subtitle: Text(
+                                "Whether you are a donor or a distributor, we chose the best place for your exchange. We regard your convenience the most and provide you with the best directions to exchange point.",
+                                style: TextStyle(
+                                  color: Color.fromARGB(220, 224, 224, 224),
+                                ),
+                              ),
+                              // SizedBox(height: 5),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                          color: kLightTextColor,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      elevation: 10,
+                      color: kBackgroundColor,
+                      child: Container(
+                        margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: const [
+                            ListTile(
+                              contentPadding: EdgeInsets.all(20),
+                              leading: Icon(CupertinoIcons.car_fill,
+                                  color: Color.fromARGB(255, 58, 114, 235),
+                                  size: 30),
+                              title: Text(
+                                "See Where Your Package Goes",
+                                style: TextStyle(
+                                  color: kTextColor,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+
+                              subtitle: Text(
+                                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident ab nulla quod dignissimos vel non corrupti doloribus voluptatum eveniet",
+                                style: TextStyle(
+                                  color: Color.fromARGB(220, 224, 224, 224),
+                                ),
+                              ),
+                              // SizedBox(height: 5),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ],
         ),
       ),

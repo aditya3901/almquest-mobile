@@ -120,7 +120,7 @@ class _RegisterState extends State<Register> {
   Widget selectedButton(VoidCallback onTap, IconData icon, String title) {
     return ElevatedButton.icon(
       onPressed: onTap,
-      style: ElevatedButton.styleFrom(primary: const Color(0xFF3B81F6)),
+      style: ElevatedButton.styleFrom(primary: const Color(0xFFd97707)),
       icon: Icon(
         icon,
         color: kTextColor,
@@ -146,12 +146,12 @@ class _RegisterState extends State<Register> {
       style: OutlinedButton.styleFrom(
         side: const BorderSide(
           width: 1,
-          color: Color(0xFF3B81F6),
+          color: Color(0xFFd97707),
         ),
       ),
       icon: Icon(
         icon,
-        color: const Color(0xFF3B81F6),
+        color: const Color(0xFFd97707),
         size: 20,
       ),
       label: Padding(
@@ -160,7 +160,7 @@ class _RegisterState extends State<Register> {
           title,
           textAlign: TextAlign.center,
           style: const TextStyle(
-            color: Color(0xFF3B81F6),
+            color: Color(0xFFd97707),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -474,7 +474,7 @@ class _RegisterState extends State<Register> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                              primary: const Color(0xFF3B81F6)),
+                              primary: const Color(0xFFd97707)),
                           child: const Padding(
                             padding: EdgeInsets.symmetric(vertical: 15),
                             child: Text(

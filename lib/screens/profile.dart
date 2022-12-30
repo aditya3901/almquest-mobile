@@ -286,7 +286,7 @@ class _ProfileState extends State<Profile> {
                                     ),
                                   ),
                                   trailing: CupertinoSwitch(
-                                    activeColor: const Color(0xFF3B81F6),
+                                    activeColor: const Color(0xFFd97707),
                                     value: user["isActive"],
                                     onChanged: (value) async {
                                       setState(() {
@@ -320,7 +320,7 @@ class _ProfileState extends State<Profile> {
                                 );
                               },
                               style: ElevatedButton.styleFrom(
-                                primary: const Color(0xFF3B81F6),
+                                primary: const Color(0xFFd97707),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -382,7 +382,7 @@ class _ProfileState extends State<Profile> {
                       const SizedBox(height: 25),
                       CircleAvatar(
                         radius: 74,
-                        backgroundColor: const Color(0xFF60A5FA),
+                        backgroundColor: const Color(0xFFFBBE27),
                         child: CircleAvatar(
                           radius: 70,
                           backgroundImage: NetworkImage(

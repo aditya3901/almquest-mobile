@@ -37,7 +37,7 @@ class HomeBody extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromARGB(255, 58, 114, 235),
+                primary: const Color(0xFFd97707),
               ),
               onPressed: () {},
               child: const Padding(
@@ -78,7 +78,7 @@ class HomeBody extends StatelessWidget {
             const SizedBox(height: 30),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                primary: const Color.fromARGB(255, 58, 114, 235),
+                primary: const Color(0xFFd97707),
               ),
               onPressed: () {},
               icon: const Icon(Icons.light_mode_outlined),
@@ -113,7 +113,7 @@ class HomeBody extends StatelessWidget {
                     TextSpan(
                       text: "Our Quest",
                       style: TextStyle(
-                        color: Color.fromARGB(255, 58, 114, 235),
+                        color: Color(0xFFd97707),
                       ),
                     ),
                   ],
@@ -265,7 +265,7 @@ class HomeBody extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 58, 114, 235),
+                        color: const Color(0xFFd97707),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Icon(
@@ -299,7 +299,7 @@ class HomeBody extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 58, 114, 235),
+                        color: const Color(0xFFd97707),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Icon(
@@ -333,7 +333,7 @@ class HomeBody extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 58, 114, 235),
+                        color: const Color(0xFFd97707),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Icon(

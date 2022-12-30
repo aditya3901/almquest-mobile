@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 import '../utils/constants.dart';
 import '../widgets/navigation_drawer.dart';
+import 'package:http/http.dart' as http;
 
 class ContactUs extends StatefulWidget {
   const ContactUs({Key? key}) : super(key: key);
@@ -47,6 +50,33 @@ class _ContactUsState extends State<ContactUs> {
           return null;
         },
       ),
+    );
+  }
+
+  void sendMail() async {
+    await http.post(
+      Uri.parse("https://api.emailjs.com/api/v1.0/email/send"),
+      headers: {
+        "origin": "http://localhost",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({
+        'service_id': 'service_ckm1buo',
+        'template_id': 'template_s1veeg8',
+        'user_id': 'AVxWmQ4WLHiXQk-Ir',
+        'template_params': {
+          "user_name": _nameController.text,
+          "user_subject": "AlmQuest Query",
+          "user_message": _messageController.text,
+          "user_email": _emailController.text.trim(),
+        },
+      }),
+    );
+
+    Get.snackbar(
+      "Mail Sent",
+      "Thanks! We've received your feedback.",
+      backgroundColor: kLightTextColor,
     );
   }
 
@@ -203,9 +233,13 @@ class _ContactUsState extends State<ContactUs> {
                       const SizedBox(height: 10),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: const Color.fromARGB(255, 58, 114, 235),
+                          primary: const Color(0xFFd97707),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            sendMail();
+                          }
+                        },
                         child: const Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child: Text(

@@ -2,13 +2,21 @@ import 'package:almquest/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class TeamBody extends StatelessWidget {
   const TeamBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Widget _profileCard(String imageUrl, String name, String role) {
+    Widget _profileCard(
+      String imageUrl,
+      String name,
+      String role,
+      String linkedin,
+      String github,
+      String mail,
+    ) {
       return Card(
         shape: RoundedRectangleBorder(
           side: const BorderSide(
@@ -28,7 +36,7 @@ class TeamBody extends StatelessWidget {
                 backgroundColor: kTextColor,
                 child: CircleAvatar(
                   radius: 76,
-                  foregroundImage: NetworkImage(imageUrl),
+                  foregroundImage: AssetImage(imageUrl),
                 ),
               ),
               const SizedBox(height: 20),
@@ -55,20 +63,29 @@ class TeamBody extends StatelessWidget {
                 children: [
                   IconButton(
                     icon: const Icon(
+                      CupertinoIcons.mail,
+                      color: Color.fromARGB(255, 255, 255, 255),
+                    ),
+                    tooltip: 'Mail ID',
+                    onPressed: () async {
+                      String url = "mailto:$mail";
+                      if (await canLaunchUrlString(url)) {
+                        await launchUrlString(url);
+                      }
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(
                       LineIcons.linkedinIn,
                       color: Color.fromARGB(255, 255, 255, 255),
                       size: 28,
                     ),
                     tooltip: 'Linked In',
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      CupertinoIcons.mail,
-                      color: Color.fromARGB(255, 255, 255, 255),
-                    ),
-                    tooltip: 'Mail ID',
-                    onPressed: () {},
+                    onPressed: () async {
+                      if (await canLaunchUrlString(linkedin)) {
+                        await launchUrlString(linkedin);
+                      }
+                    },
                   ),
                   IconButton(
                     icon: const Icon(
@@ -77,7 +94,11 @@ class TeamBody extends StatelessWidget {
                       size: 28,
                     ),
                     tooltip: 'GitHub',
-                    onPressed: () {},
+                    onPressed: () async {
+                      if (await canLaunchUrlString(github)) {
+                        await launchUrlString(github);
+                      }
+                    },
                   ),
                 ],
               ),
@@ -112,27 +133,39 @@ class TeamBody extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     _profileCard(
-                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuptVqZE6-xdsNirk9X1ZzZEUYQlktFIfWHw&usqp=CAU",
+                      "assets/team/aditya.jpeg",
                       "Aditya Das",
                       "Backend Developer",
+                      "https://www.linkedin.com/in/aditya-das-86069b202/",
+                      "https://github.com/aditya3901",
+                      "suvosig6d@gmail.com",
                     ),
                     const SizedBox(height: 20),
                     _profileCard(
-                      "https://consequence.net/wp-content/uploads/2022/07/tom-cruise.jpg?quality=80",
+                      "assets/team/tamonash.jpeg",
                       "Tamonash Bhattacharyya",
                       "AI/ML Developer",
+                      "https://www.linkedin.com/in/tamonash-bhattacharyya-b9a527223/",
+                      "https://github.com/DevUpTam",
+                      "tamonashbhattacharyya2@gmail.com",
                     ),
                     const SizedBox(height: 20),
                     _profileCard(
-                      "https://pbs.twimg.com/media/Fj7zP3xXgAAFPG2?format=jpg&name=large",
+                      "assets/team/sudo.jpeg",
                       "Suddhabrato Ghosh",
                       "Frontend Developer",
+                      "https://www.linkedin.com/in/suddhabrato-ghosh/",
+                      "https://github.com/suddhabrato",
+                      "suddhabratoghosh@gmail.com",
                     ),
                     const SizedBox(height: 20),
                     _profileCard(
-                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgT_z1t-Ft-T2KTvg3zeNhZsQPLfaPEoHSig&usqp=CAU",
+                      "assets/team/anirban.jpeg",
                       "Anirban Roy",
-                      "Team Lead",
+                      "Content Writer",
+                      "https://www.linkedin.com/in/wrrikk/",
+                      "https://github.com/Wrrikk",
+                      "royrik23@gmail.com",
                     ),
                     const SizedBox(height: 20),
                   ],

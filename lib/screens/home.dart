@@ -93,9 +93,14 @@ class _HomeState extends State<Home> {
     final json = jsonDecode(res.body);
     notifs = json["notifs"];
     notifs = notifs.reversed.toList();
-    setState(() {
-      isLoggedIn = true;
-    });
+
+    checkNotif = prefs!.getBool("new_notif") ?? false;
+
+    if (mounted) {
+      setState(() {
+        isLoggedIn = true;
+      });
+    }
   }
 
   @override
@@ -107,7 +112,7 @@ class _HomeState extends State<Home> {
   void _initPusher() async {
     try {
       await Pusher.init(
-        "b369bdc486176cddddfd",
+        "e8e48f668ab490fa03e0",
         PusherOptions(
           cluster: "ap2",
         ),
@@ -119,9 +124,12 @@ class _HomeState extends State<Home> {
         user["id"],
         (onEvent) async {
           await getNotifs();
-          setState(() {
-            checkNotif = true;
-          });
+          prefs!.setBool("new_notif", true);
+          if (mounted) {
+            setState(() {
+              checkNotif = true;
+            });
+          }
           final event = jsonDecode(onEvent.data);
           Get.snackbar(
             "New notification",
@@ -196,16 +204,16 @@ class _HomeState extends State<Home> {
                         String notifMsg = "";
                         if (notif["state"] == "Not Paired") {
                           notifMsg =
-                              "Oops! 😞 Looks like there are no distributors available near you.";
+                              "Oops! Looks like there are no distributors available near you.";
                         } else if (notif["state"] == "Paired") {
                           notifMsg =
-                              "Hurray! 🎉 We have found a distributor for your package.";
+                              "Hurray! We have found a distributor for your package.";
                         } else if (notif["state"] == "Received") {
                           notifMsg =
-                              "Thanks! 🙏🏻 Distributor has received your package.";
+                              "Thanks! Distributor has received your package.";
                         } else {
                           notifMsg =
-                              "Celebration! 🎊 Your package just got distributed.";
+                              "Celebration! Your package just got distributed.";
                         }
 
                         return PopupMenuItem(
@@ -220,8 +228,9 @@ class _HomeState extends State<Home> {
                                 ? Colors.transparent
                                 : Colors.white12,
                             leading: CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(notif["photo"] ?? userImg),
+                              backgroundImage: notif["photo"] != ""
+                                  ? NetworkImage(notif["photo"])
+                                  : NetworkImage(userImg),
                               onBackgroundImageError:
                                   (exception, stackTrace) {},
                             ),

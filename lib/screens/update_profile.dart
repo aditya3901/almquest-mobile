@@ -205,7 +205,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                              primary: const Color(0xFF3B81F6)),
+                              primary: const Color(0xFFd97707)),
                           child: const Padding(
                             padding: EdgeInsets.symmetric(vertical: 15),
                             child: Text(

@@ -70,7 +70,7 @@ class _ContactUsState extends State<ContactUs> {
             children: [
               const SizedBox(height: 20),
               const Text(
-                "Ultimate Design Solution",
+                "Contact Us",
                 style: TextStyle(
                   color: kTextColor,
                   fontSize: 30,
@@ -79,26 +79,9 @@ class _ContactUsState extends State<ContactUs> {
               ),
               const SizedBox(height: 20),
               const Text(
-                "AlmQuest brings to you the opportunity to be the one to donate food or, be the one to get in touch with such donors and distribute the food where its needed.",
+                "If you have any queries regarding how AlmQuest works, feel free to reach out to us. We would love to hear any suggestions that you feel can improve the user experience here at AlmQuest.",
                 style: TextStyle(
                   color: kLightTextColor,
-                ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: const Color.fromARGB(255, 58, 114, 235),
-                ),
-                onPressed: () {},
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Text(
-                    "Get In Touch",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
-                  ),
                 ),
               ),
               const SizedBox(height: 30),
@@ -151,8 +134,9 @@ class _ContactUsState extends State<ContactUs> {
                   ),
                 ],
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               Card(
+                margin: const EdgeInsets.all(0),
                 shape: RoundedRectangleBorder(
                   side: const BorderSide(
                     color: kLightTextColor,

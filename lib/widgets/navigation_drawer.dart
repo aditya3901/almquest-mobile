@@ -13,78 +13,89 @@ class NavigationDrawer extends StatelessWidget {
         padding: EdgeInsets.only(
           top: MediaQuery.of(context).padding.top,
         ),
-        child: SingleChildScrollView(
-          child: Wrap(
-            runSpacing: 14,
-            children: [
-              ListTile(
-                onTap: () {
-                  Navigator.of(context).pop();
-                  Get.offAll(() => Home());
-                },
-                leading: const Icon(
-                  CupertinoIcons.question_circle,
-                  color: kTextColor,
-                ),
-                title: const Text(
-                  "About AlmQuest",
-                  style: TextStyle(
-                    color: kTextColor,
-                    fontSize: 14,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Wrap(
+              runSpacing: 14,
+              children: [
+                Center(
+                  child: Image.asset(
+                    "assets/logo.png",
+                    height: 150,
                   ),
                 ),
-              ),
-              ListTile(
-                onTap: () {
-                  Navigator.of(context).pop();
-                  Get.offAll(() => const Team());
-                },
-                leading: const Icon(
-                  CupertinoIcons.person_2_alt,
-                  color: kTextColor,
+                const Divider(
+                  color: kLightTextColor,
                 ),
-                title: const Text(
-                  "Our Team",
-                  style: TextStyle(
+                ListTile(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Get.offAll(() => Home());
+                  },
+                  leading: const Icon(
+                    Icons.home_outlined,
                     color: kTextColor,
-                    fontSize: 14,
+                  ),
+                  title: const Text(
+                    "AlmQuest Home",
+                    style: TextStyle(
+                      color: kTextColor,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
-              ),
-              ListTile(
-                onTap: () {
-                  Navigator.of(context).pop();
-                  Get.offAll(() => const ContactUs());
-                },
-                leading: const Icon(
-                  Icons.feedback_outlined,
-                  color: kTextColor,
-                ),
-                title: const Text(
-                  "Contact Us",
-                  style: TextStyle(
+                ListTile(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Get.offAll(() => const Team());
+                  },
+                  leading: const Icon(
+                    CupertinoIcons.person_2,
                     color: kTextColor,
-                    fontSize: 14,
+                  ),
+                  title: const Text(
+                    "Our Team",
+                    style: TextStyle(
+                      color: kTextColor,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
-              ),
-              ListTile(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                leading: const Icon(
-                  CupertinoIcons.settings,
-                  color: kTextColor,
-                ),
-                title: const Text(
-                  "Settings",
-                  style: TextStyle(
+                ListTile(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Get.offAll(() => const ContactUs());
+                  },
+                  leading: const Icon(
+                    Icons.feedback_outlined,
                     color: kTextColor,
-                    fontSize: 14,
+                  ),
+                  title: const Text(
+                    "Contact Us",
+                    style: TextStyle(
+                      color: kTextColor,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
-              ),
-            ],
+                ListTile(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  leading: const Icon(
+                    CupertinoIcons.settings,
+                    color: kTextColor,
+                  ),
+                  title: const Text(
+                    "Settings",
+                    style: TextStyle(
+                      color: kTextColor,
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

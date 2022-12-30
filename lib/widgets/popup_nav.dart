@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../screens/screens.dart';
 import '../utils/constants.dart';
 import 'package:http/http.dart' as http;
@@ -24,6 +25,9 @@ class PopUpNav extends StatelessWidget {
   }
 
   void onSelected(BuildContext context, dynamic value) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool("new_notif", false);
+
     if (value["notif"]["notif_seen"] == false) {
       notifSeen(value["notif"]["_id"]);
     }

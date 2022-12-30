@@ -237,8 +237,7 @@ class HomeBody extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 50),
-            const SizedBox(height: 20),
+            const SizedBox(height: 70),
             const Text(
               "Explore Our Awesome Features",
               style: TextStyle(
@@ -363,6 +362,205 @@ class HomeBody extends StatelessWidget {
                 const SizedBox(height: 50),
               ],
             ),
+            const SizedBox(height: 30),
+            const Text(
+              "What Our Users Say",
+              style: TextStyle(
+                color: kTextColor,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Card(
+              shape: RoundedRectangleBorder(
+                side: const BorderSide(
+                  color: kLightTextColor,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              color: kBackgroundColor,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    const Text(
+                      "\"We have been in business for almost a decade now and the most morally derogatory problem that we had faced was the amount of food we had to throw away on a daily basis because we simply did not have the means to donate. But now with AlmQuest we can do that effortlessly.\"",
+                      style: TextStyle(
+                        color: Color.fromARGB(220, 224, 224, 224),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 30,
+                          backgroundColor: kTextColor,
+                          child: CircleAvatar(
+                            radius: 28,
+                            backgroundImage: NetworkImage(
+                              "https://im1.dineout.co.in/images/uploads/restaurant/sharpen/4/g/c/p46886-164187619861dd0ae6a708c.jpg?tr=tr:n-medium",
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "Food Heaven",
+                              style: TextStyle(
+                                color: kTextColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              "Family Restaurant",
+                              style: TextStyle(
+                                color: kLightTextColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Card(
+              shape: RoundedRectangleBorder(
+                side: const BorderSide(
+                  color: kLightTextColor,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              color: const Color(0xFFd97707),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    const Text(
+                      "\"AlmQuest will hopefully help a lot in social development.\"",
+                      style: TextStyle(
+                        color: kTextColor,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 30,
+                          backgroundColor: kTextColor,
+                          child: CircleAvatar(
+                            radius: 28,
+                            backgroundImage: NetworkImage(
+                              "https://images.unsplash.com/photo-1531590878845-12627191e687?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=764&q=80",
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "Jeny Doe",
+                              style: TextStyle(
+                                color: kTextColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              "Tech Professional",
+                              style: TextStyle(
+                                color: kLightTextColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Card(
+              shape: RoundedRectangleBorder(
+                side: const BorderSide(
+                  color: kLightTextColor,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              color: kBackgroundColor,
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    const Text(
+                      "\"We are a group of teachers at a High School in a remote area in the Nadia district of West Bengal, India. We have a lot of under-nourished population in the region surrroundingour school. Government provided food rations only help some and despite our best intention of feeding these people, we never had a food source to make that feasible. Well, now with AlmQuest we can do just that.\"",
+                      style: TextStyle(
+                        color: Color.fromARGB(220, 224, 224, 224),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 30,
+                          backgroundColor: kTextColor,
+                          child: CircleAvatar(
+                            radius: 28,
+                            backgroundImage: NetworkImage(
+                              "https://www.ngoregistration.org/wp-content/uploads/2014/07/non-government-organization-300x197.jpg",
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "New Light",
+                              style: TextStyle(
+                                color: kTextColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              "A teacher-run NGO",
+                              style: TextStyle(
+                                color: kLightTextColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 30),
+            const Text(
+              "AlmQuest",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: kTextColor,
+                fontSize: 20,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              "© Copyright 2022. All Rights Reserved.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: kTextColor,
+              ),
+            ),
+            const SizedBox(height: 10),
           ],
         ),
       ),
